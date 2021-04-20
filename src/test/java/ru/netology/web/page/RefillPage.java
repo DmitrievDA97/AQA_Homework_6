@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.Keys;
 
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
 public class RefillPage {
@@ -23,5 +24,9 @@ public class RefillPage {
         refill.click();
         return new DashboardPage();
     }
+    public SelenideElement error() {
+        return $(byText("Ошибка")).shouldHave(Condition.visible);
+    }
+
 }
 

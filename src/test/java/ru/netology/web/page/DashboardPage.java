@@ -1,9 +1,11 @@
 package ru.netology.web.page;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import lombok.val;
 
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 
 public class DashboardPage {
@@ -38,5 +40,7 @@ public class DashboardPage {
     val value = text.substring(start + balanceStart.length(), finish);
     return Integer.parseInt(value);
   }
+
+
 }
 

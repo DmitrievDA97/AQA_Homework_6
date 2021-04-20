@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import ru.netology.web.data.DataHelper;
 import ru.netology.web.page.DashboardPage;
 import ru.netology.web.page.LoginPageV1;
+import ru.netology.web.page.RefillPage;
 
 import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -48,22 +49,29 @@ class MoneyTransferTest {
     void shouldRefillFirstCard() {
         val dashboardPage = new DashboardPage();
         int transferAmount = 500;
-        int expectedCardBalance = dashboardPage.getCardBalance(DataHelper.firstCard().getCardId()) + transferAmount;
+        int expectedFirstCardBalance = dashboardPage.getCardBalance(DataHelper.firstCard().getCardId()) + transferAmount;
+        int expectedSecondCardBalance = dashboardPage.getCardBalance(DataHelper.secondCard().getCardId()) - transferAmount;
         val refillPage = dashboardPage.topUpCard(1);
         refillPage.moneyTransfer(String.valueOf(transferAmount), DataHelper.secondCard().getCardNumber());
-        int cardBalance = dashboardPage.getCardBalance(DataHelper.firstCard().getCardId());
-        assertEquals(expectedCardBalance, cardBalance);
+        int firstCardBalance = dashboardPage.getCardBalance(DataHelper.firstCard().getCardId());
+        int secondCardBalance = dashboardPage.getCardBalance(DataHelper.secondCard().getCardId());
+        assertEquals(expectedFirstCardBalance, firstCardBalance);
+        assertEquals(expectedSecondCardBalance, secondCardBalance);
     }
 
     @Test
     void shouldRefillSecondCard() {
         val dashboardPage = new DashboardPage();
         int transferAmount = 5000;
-        int expectedCardBalance = dashboardPage.getCardBalance(DataHelper.secondCard().getCardId()) + transferAmount;
+        int expectedSecondCardBalance = dashboardPage.getCardBalance(DataHelper.secondCard().getCardId()) + transferAmount;
+        int expectedFirstCardBalance = dashboardPage.getCardBalance(DataHelper.firstCard().getCardId()) - transferAmount;
         val refillPage = dashboardPage.topUpCard(2);
         refillPage.moneyTransfer(String.valueOf(transferAmount), DataHelper.firstCard().getCardNumber());
-        int cardBalance = dashboardPage.getCardBalance(DataHelper.secondCard().getCardId());
-        assertEquals(expectedCardBalance, cardBalance);
+        int secondCardBalance = dashboardPage.getCardBalance(DataHelper.secondCard().getCardId());
+        int firstCardBalance = dashboardPage.getCardBalance(DataHelper.firstCard().getCardId());
+        assertEquals(expectedSecondCardBalance, secondCardBalance);
+        assertEquals(expectedFirstCardBalance, firstCardBalance);
+
     }
 
     @Test
@@ -72,9 +80,7 @@ class MoneyTransferTest {
         int transferAmount = 11000;
         val refillPage = dashboardPage.topUpCard(2);
         refillPage.moneyTransfer(String.valueOf(transferAmount), DataHelper.firstCard().getCardNumber());
-        $(byText("Ошибка")).shouldHave(Condition.visible);
-
-
+        refillPage.error();
     }
 }
 
